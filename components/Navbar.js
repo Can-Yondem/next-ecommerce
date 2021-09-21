@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import Link from "next/link"
 import { MdPersonOutline } from 'react-icons/md'
 import { FiShoppingCart } from 'react-icons/fi'
 import { AiOutlineSearch } from 'react-icons/ai';
+import DropMenuAccount from './DropMenuAccount';
+import AuthContext from '../context/AuthContext';
 
 const Navbar = () => {
+    const [toggle, setToggle] = useState(false);
+    const {user} = useContext(AuthContext);
     return (
         <>
             <div className=" w-full fixed z-10 top-0 bg-white ">
@@ -18,17 +22,33 @@ const Navbar = () => {
                             </div>
                         </div>
                         <ul className="flex gap-10 text-3xl col-span-3 ml-auto items-center">
-                            <li className="hover:text-primary-color transition ease-out duration-200 cursor-pointer">
-                                <a href="/login" className="flex bg-primary-color text-white px-3 items-center rounded-xl py-1 hover:bg-yellow-700 transition ease-out duration-300">
-                                    <div className="mr-2">
-                                        <MdPersonOutline />
-                                    </div>
-                                    <div>
-                                        <p className="text-base font-semibold">Giriş Yap</p>
-                                        <p className="text-xs -mt-1">veya üye ol</p>
-                                    </div>
-                                </a>
-                            </li>
+                            {user ?
+                                <>
+                                <li className="hover:text-primary-color transition ease-out duration-200 cursor-pointer ">
+                                    <button className="flex bg-primary-color text-white px-3 items-center rounded-xl py-1 hover:bg-yellow-700 transition ease-out duration-300" onClick={() => setToggle(!toggle)}>
+                                        <div className="mr-2">
+                                            <MdPersonOutline />
+                                        </div>
+                                        <div>
+                                            <p className="text-base font-semibold text-left">Hesabım</p>
+                                            <p className="text-xs -mt-1">{user}</p>
+                                        </div>
+                                    </button>
+                                </li>
+                                    {toggle && <DropMenuAccount />}
+                                </>: <li className="hover:text-primary-color transition ease-out duration-200 cursor-pointer">
+                                    <a href="/login" className="flex bg-primary-color text-white px-3 items-center rounded-xl py-1 hover:bg-yellow-700 transition ease-out duration-300">
+                                        <div className="mr-2">
+                                            <MdPersonOutline />
+                                        </div>
+                                        <div>
+                                            <p className="text-base font-semibold">Giriş Yap</p>
+                                            <p className="text-xs -mt-1">veya üye ol</p>
+                                        </div>
+                                    </a>
+                                </li>
+                            }
+
 
                             <li className="hover:text-primary-color transition ease-out duration-200 cursor-pointer">
                                 <FiShoppingCart />

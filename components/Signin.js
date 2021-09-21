@@ -1,14 +1,24 @@
-import React from 'react'
-import { AiOutlineUser } from 'react-icons/ai';
+import React, { useContext, useState, useEffect } from 'react'
 import { VscKey } from 'react-icons/vsc';
 import { FcGoogle } from 'react-icons/fc';
 import { AiOutlineTwitter } from 'react-icons/ai';
 import { ImFacebook } from 'react-icons/im';
 import { AiOutlineMail } from 'react-icons/ai';
-
+import AuthContext from '../context/AuthContext';
+import Link from 'next/link';
 
 
 const Signin = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const { signin, error } = useContext(AuthContext);
+
+    useEffect(() => error && alert(error));
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        signin({ email, password });
+    }
     return (
         <div className="">
             <form className="flex flex-col justify-center items-center gap-6 bg-white sm:w-[475px] w-[350px] rounded-b-xl mx-auto">
@@ -17,7 +27,7 @@ const Signin = () => {
                         <div className="text-lg text-gray-400">
                             <AiOutlineMail />
                         </div>
-                        <input type="email" id="email" className="p-2 pl-3 rounded-2xl outline-none w-72" placeholder="Eposta"/>
+                        <input type="email" id="email" className="p-2 pl-3 rounded-2xl outline-none w-72" placeholder="Eposta" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                 </div>
                 <div>
@@ -25,14 +35,18 @@ const Signin = () => {
                         <div className="text-lg text-gray-400">
                             <VscKey />
                         </div>
-                        <input type="password" id="password" className="p-2 pl-3 rounded-2xl outline-none w-72 " placeholder="Şifre" />
+                        <input type="password" id="password" className="p-2 pl-3 rounded-2xl outline-none w-72 " placeholder="Şifre" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
                 </div>
-                <button className="flex items-center gap-3 md:px-10 px-5 text-white font-semibold  bg-primary-color hover:bg-yellow-700 p-2 rounded-md mt-4 transition ease-out duration-300 ">Giriş Yap</button>
+                <div>
+                    <Link href="/api/auth/signin">
+                        <button className="flex items-center gap-3 md:px-10 px-5 text-white font-semibold  bg-primary-color hover:bg-yellow-700 p-2 rounded-md mt-4 transition ease-out duration-300" onClick={handleSubmit}>Giriş Yap</button>
+                    </Link>
+                </div>
                 <div className="flex items-center gap-3 w-full justify-center">
-                    <hr className="text-primary-color w-4/12"/>
+                    <hr className="text-primary-color w-4/12" />
                     <div className="font-semibold">yada</div>
-                    <hr className="text-primary-color w-4/12"/>
+                    <hr className="text-primary-color w-4/12" />
                 </div>
                 <div className="flex gap-6 mb-5">
                     <button className="border-2 rounded-full p-3 border-secondary-color bg-secondary-color"><FcGoogle /></button>
@@ -47,3 +61,13 @@ const Signin = () => {
 }
 
 export default Signin
+
+export const getServerSideProps = async ({ req }) => {
+    const session = await getSession({ req });
+    return {
+      props: {
+        session,
+      },
+    };
+  };
+
