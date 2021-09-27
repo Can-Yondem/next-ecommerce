@@ -1,7 +1,8 @@
 import 'tailwindcss/tailwind.css'
 import Layout from '../components/Layout'
-import { AuthProvider } from "../context/AuthContext";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import { Provider } from 'react-redux';
+import { store } from "../redux/store";
 
 function MyApp({ Component, pageProps }) {
 
@@ -11,14 +12,14 @@ function MyApp({ Component, pageProps }) {
   });
 
   return (
-
+    <Provider store={store}>
       <ApolloProvider client={client}>
-        <AuthProvider>
           <Layout>
             <Component {...pageProps} />
           </Layout>
-        </AuthProvider>
       </ApolloProvider>
+    </Provider>
+
 
   )
 }

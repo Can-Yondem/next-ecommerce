@@ -1,23 +1,25 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { VscKey } from 'react-icons/vsc';
 import { FcGoogle } from 'react-icons/fc';
 import { AiOutlineTwitter } from 'react-icons/ai';
 import { ImFacebook } from 'react-icons/im';
 import { AiOutlineMail } from 'react-icons/ai';
-import AuthContext from '../context/AuthContext';
 import Link from 'next/link';
+import { useDispatch } from 'react-redux';
+import { signin } from '../redux/user/userSlice';
+import { useRouter } from 'next/router';
 
 
 const Signin = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { signin, error } = useContext(AuthContext);
-
-    useEffect(() => error && alert(error));
+    const dispatch = useDispatch();
+    const router = useRouter();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        signin({ email, password });
+        dispatch(signin({ email, password }))
+        .then(res => res.type === "user/signin/rejected" ? alert(res.payload) : router.push("/"))
     }
     return (
         <div className="">

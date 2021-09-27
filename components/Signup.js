@@ -1,8 +1,10 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { AiOutlineUser } from 'react-icons/ai';
 import { VscKey } from 'react-icons/vsc';
 import { AiOutlineMail } from 'react-icons/ai';
-import AuthContext from '../context/AuthContext';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
+import { signup } from '../redux/user/userSlice';
 
 const Signin = () => {
     const [email, setEmail] = useState("");
@@ -11,13 +13,13 @@ const Signin = () => {
     const [confPassword, setConfPassword] = useState();
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
-    const { signup, error } = useContext(AuthContext);
-
-    useEffect(() => error && alert(error));
+    const dispatch = useDispatch();
+    const router = useRouter();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        signup({ username, email, password, name, surname });
+        dispatch(signup({ username, email, password, name, surname }))
+        .then(res => res.type === "user/signup/rejected" ? alert(res.payload) : router.push("/"))
     }
 
     return (

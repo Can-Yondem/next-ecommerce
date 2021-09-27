@@ -1,14 +1,30 @@
-import React, { useContext, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from "next/link"
 import { MdPersonOutline } from 'react-icons/md'
 import { FiShoppingCart } from 'react-icons/fi'
 import { AiOutlineSearch } from 'react-icons/ai';
 import DropMenuAccount from './DropMenuAccount';
-import AuthContext from '../context/AuthContext';
+import TextTruncate from 'react-text-truncate';
+import { useSelector, useDispatch } from 'react-redux';
+import { checkUserLoggedIn } from '../redux/user/userSlice';
 
 const Navbar = () => {
     const [toggle, setToggle] = useState(false);
-    const {user} = useContext(AuthContext);
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.users.user);
+    
+    let role = "";
+    let fullName = "";
+
+    useEffect(() => {
+        dispatch(checkUserLoggedIn())
+    }, [dispatch])
+
+    if (user !== null) {
+        role = user.user.role.type
+        fullName = `${user.user.name} ${user.user.surname}`
+    }
+
     return (
         <>
             <div className=" w-full fixed z-10 top-0 bg-white ">
@@ -24,19 +40,25 @@ const Navbar = () => {
                         <ul className="flex gap-10 text-3xl col-span-3 ml-auto items-center">
                             {user ?
                                 <>
-                                <li className="hover:text-primary-color transition ease-out duration-200 cursor-pointer ">
-                                    <button className="flex bg-primary-color text-white px-3 items-center rounded-xl py-1 hover:bg-yellow-700 transition ease-out duration-300" onClick={() => setToggle(!toggle)}>
-                                        <div className="mr-2">
-                                            <MdPersonOutline />
-                                        </div>
-                                        <div>
-                                            <p className="text-base font-semibold text-left">Hesabım</p>
-                                            <p className="text-xs -mt-1">{user}</p>
-                                        </div>
-                                    </button>
-                                </li>
-                                    {toggle && <DropMenuAccount />}
-                                </>: <li className="hover:text-primary-color transition ease-out duration-200 cursor-pointer">
+                                    <li className="hover:text-primary-color transition ease-out duration-200 cursor-pointer ">
+                                        <button className="flex bg-primary-color text-white px-3 items-center rounded-xl py-1 hover:bg-yellow-700 transition ease-out duration-300" onClick={() => setToggle(!toggle)}>
+                                            <div className="mr-2">
+                                                <MdPersonOutline />
+                                            </div>
+                                            <div>
+                                                <p className="text-base font-semibold text-left">Hesabım</p>
+                                                <p className="text-xs -mt-1">
+                                                    <TextTruncate
+                                                        line={1}
+                                                        truncateText="…"
+                                                        text={fullName}
+                                                    />
+                                                </p>
+                                            </div>
+                                        </button>
+                                    </li>
+                                    {toggle && <DropMenuAccount role={role} />}
+                                </> : <li className="hover:text-primary-color transition ease-out duration-200 cursor-pointer">
                                     <a href="/login" className="flex bg-primary-color text-white px-3 items-center rounded-xl py-1 hover:bg-yellow-700 transition ease-out duration-300">
                                         <div className="mr-2">
                                             <MdPersonOutline />
