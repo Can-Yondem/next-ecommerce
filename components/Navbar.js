@@ -7,18 +7,22 @@ import DropMenuAccount from './DropMenuAccount';
 import TextTruncate from 'react-text-truncate';
 import { useSelector, useDispatch } from 'react-redux';
 import { checkUserLoggedIn } from '../redux/user/userSlice';
+import { get_maincategory } from '../redux/products/productsSlice';
 
 const Navbar = () => {
     const [toggle, setToggle] = useState(false);
     const dispatch = useDispatch();
     const user = useSelector(state => state.users.user);
-    
+    const mainCategory = useSelector(state => state.products.mainCategory);
     let role = "";
     let fullName = "";
 
     useEffect(() => {
+        dispatch(get_maincategory());
         dispatch(checkUserLoggedIn())
-    }, [dispatch])
+    }, [dispatch]);
+
+    if (!mainCategory) return null;
 
     if (user !== null) {
         role = user.user.role.type
@@ -88,29 +92,17 @@ const Navbar = () => {
                             </Link>
                         </li>
 
-                        <li className="hover:text-primary-color transition ease-out duration-200">
-                            <Link href="/">
-                                <a>
-                                    Kategori
-                                </a>
-                            </Link>
-                        </li>
-
-                        <li className="hover:text-primary-color transition ease-out duration-200">
-                            <Link href="/">
-                                <a>
-                                    Kategori
-                                </a>
-                            </Link>
-                        </li>
-
-                        <li className="hover:text-primary-color transition ease-out duration-200">
-                            <Link href="/">
-                                <a>
-                                    Kategori
-                                </a>
-                            </Link>
-                        </li>
+                        {mainCategory.map((item, index) => {
+                            return (
+                                <li key={index} className="hover:text-primary-color transition ease-out duration-200">
+                                    <Link href={`/${item.main_category.toLowerCase()}`} >
+                                        <a>
+                                            {item.main_category}
+                                        </a>
+                                    </Link>
+                                </li>
+                            )
+                        })}
                     </ul>
                 </div>
             </div>

@@ -38,12 +38,9 @@ export const signup = createAsyncThunk("user/signup", async (user, { rejectWithV
 });
 
 export const signout = createAsyncThunk("user/signout", async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/signout`, {
+    await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/signout`, {
         method: "POST",
     });
-    if (res.ok) {
-        return data;
-    }
 })
 
 export const checkUserLoggedIn = createAsyncThunk("user/checkUser", async (_,{ rejectWithValue }) => {
