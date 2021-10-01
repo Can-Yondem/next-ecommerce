@@ -3,7 +3,6 @@ import Navbar from './Navbar'
 import { useRouter } from 'next/router'
 
 
-
 const Layout = ({children}) => {
     const router = useRouter();
     const routeControl = router.route !== "/login";

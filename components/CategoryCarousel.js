@@ -32,8 +32,8 @@ const CategoryCarousel = ({ productitem }) => {
         dots: true,
         infinite: true,
         speed: 500,
-        slidesToShow: 4,
-        slidesToScroll: 3,
+        slidesToShow: 6,
+        slidesToScroll: 6,
         nextArrow: <SampleNextArrow />,
         prevArrow: <SamplePrevArrow />,
         responsive: [
@@ -82,26 +82,30 @@ const CategoryCarousel = ({ productitem }) => {
         ]
 
     };
-    console.log(loading)
+
     return (
         <div>
             <Slider {...settings}>
-                {productitem.map(item => {
+                {productitem.map((item,index) => {
                     return (
-                        <>
+                        <div key={index}>
                             {
-                                loading ? <ProductSkeleton /> : <Link href={{ pathname: "/[slug]" }} as={`/${item.slug}`}>
-                                    <div className="mr-5 cursor-pointer">
-                                        <div className="border-2 border-gray-100 rounded-lg hover:shadow-lg transition ease-out duration-300 h-[200px] flex justify-center mr-5 ml-5">
-                                            <img src={item.image1[0] ? item.image1[0].url : "none.png"} alt="" className="my-2" />
-                                        </div>
-                                        <div className="px-8 mt-3">
+                                loading ? <ProductSkeleton /> :
+                                    <div className="mr-5 cursor-pointer" >
+                                        <Link href="/product/[slug]" as={`/product/${item.slug}`}>
+                                            <a>
+                                                <div className="border-2 border-gray-100 rounded-lg hover:shadow-lg transition ease-out duration-300 h-[200px] flex justify-center mr-5 ml-5">
+                                                    <img src={item.image1[0] ? item.image1[0].url : "none.png"} alt="" className="my-2" />
+                                                </div>
+                                            </a>
+                                        </Link>
+                                        <div className="px-8 mt-3" >
                                             <p className="font-semibold text-xl text-primary-color mt-3">{item.price}₺</p>
                                             <p className="text-sm">{item.product_name}</p>
                                         </div>
                                     </div>
-                                </Link>}
-                        </>
+                            }
+                        </div>
                     )
                 })}
 

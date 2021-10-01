@@ -8,12 +8,15 @@ import TextTruncate from 'react-text-truncate';
 import { useSelector, useDispatch } from 'react-redux';
 import { checkUserLoggedIn } from '../redux/user/userSlice';
 import { get_maincategory } from '../redux/products/productsSlice';
+import DropMenuCategory from './DropMenuCategory';
+
 
 const Navbar = () => {
     const [toggle, setToggle] = useState(false);
     const dispatch = useDispatch();
     const user = useSelector(state => state.users.user);
     const mainCategory = useSelector(state => state.products.mainCategory);
+
     let role = "";
     let fullName = "";
 
@@ -83,7 +86,7 @@ const Navbar = () => {
                     </div>
                 </div>
                 <div className="container mx-auto py-2">
-                    <ul className="flex gap-6 justify-center font-semibold">
+                    <ul className="flex gap-4 justify-center font-semibold text-sm text-center items-center leading-4">
                         <li className="hover:text-primary-color transition ease-out duration-200">
                             <Link href="/">
                                 <a>
@@ -94,15 +97,18 @@ const Navbar = () => {
 
                         {mainCategory.map((item, index) => {
                             return (
-                                <li key={index} className="hover:text-primary-color transition ease-out duration-200">
-                                    <Link href={`/${item.main_category.toLowerCase()}`} >
-                                        <a>
-                                            {item.main_category}
-                                        </a>
-                                    </Link>
+                                <li key={index} className="w-28">
+                                    <div>
+                                        <Link href="/[main_category_slug]"  as={`/${item.main_category_slug}`} >
+                                            <a className="hover:text-primary-color transition ease-out duration-200 cursor-pointer">
+                                                {item.main_category}
+                                            </a>
+                                        </Link>
+                                    </div>
                                 </li>
                             )
                         })}
+
                     </ul>
                 </div>
             </div>

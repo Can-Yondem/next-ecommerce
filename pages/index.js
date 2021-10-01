@@ -4,8 +4,8 @@ import Layout from '../components/Layout'
 import Products from '../components/Products'
 import CategoryCarousel from '../components/CategoryCarousel'
 import { useDispatch, useSelector } from "react-redux"
-import { get_category, get_othercategory } from "../redux/products/productsSlice"
-import { useEffect } from "react"
+import { get_subcategory, get_othercategory } from "../redux/products/productsSlice"
+import { useEffect, useState } from "react"
 import { getRandomCategories } from '../utils/randomCategories'
 
 
@@ -13,21 +13,21 @@ import { getRandomCategories } from '../utils/randomCategories'
 
 export default function Home() {
   const dispatch = useDispatch();
-  const category = useSelector((state) => state.products.category);
+  const subcategory = useSelector((state) => state.products.subcategory);
   const otherCategory = useSelector((state) => state.products.otherCategory);
   const loading = useSelector((state) => state.products.loading);
-  let randomCategories = [];
+  const [randomCategories, setRandomCategories] = useState(null);
 
   useEffect(() => {
-    dispatch(get_category());
+    dispatch(get_subcategory());
     dispatch(get_othercategory());
-  }, [dispatch])
+  }, [dispatch]);
 
-
-  if (!category) return null;
+  //setRandomCategories(getRandomCategories(subcategory.length, subcategory, 3));
   if (!otherCategory) return null;
-  //randomCategories = getRandomCategories(category.length, category, 3);
   //if (!randomCategories) return null;
+  //if (!subcategory) return null;
+
   /*
   * Fonksiyon parametreleri (Rasgele sayının maksimum değeri, ürün dizisi, dizi kaç parametreli dönsün)
   */
@@ -40,32 +40,31 @@ export default function Home() {
           </div>
           */
 
+          /* 
+        {randomCategories.map((item,index) => {
+            return (
+              <div className="mb-16" key={index}>
+                <p className="font-bold text-4xl text-header-color mb-5 ml-4 ">{item.sub_category}</p>
+                <CategoryCarousel productitem={item.products} />
+              </div>
+            )
+          })} */
+
   return (
     <>
-      <Layout>
       <MainCarousel />
         <div className="mt-16 container mx-auto">
 
-          {otherCategory.map(item => {
+          {otherCategory.map((item,index) => {
             return (
-              <div className="mb-16">
+              <div className="mb-16" key={index}>
                 <p className="font-bold text-4xl text-header-color mb-5 ml-4 ">{item.other_category_name}</p>
                 <CategoryCarousel productitem={item.products} />
               </div>
             )
           })}
 
-          {randomCategories.map(item => {
-            console.log(item);
-            return (
-              <div className="mb-16">
-                <p className="font-bold text-4xl text-header-color mb-5">{item.categoryName}</p>
-                <CategoryCarousel productitem={item.products} />
-              </div>
-            )
-          })}
         </div>
-      </Layout>
     </>
   )
 }
