@@ -6,7 +6,7 @@ import DropDownAccount from "../DropDownAccount";
 import TextTruncate from "react-text-truncate";
 import Navbar from "../Navbar/";
 
-const Header = ({role,fullName, isUser}) => {
+const Header = ({ role, fullName }) => {
   const [toggle, setToggle] = useState(false);
 
   return (
@@ -26,7 +26,7 @@ const Header = ({role,fullName, isUser}) => {
               </div>
             </div>
             <ul className="flex gap-10 text-3xl col-span-3 ml-auto items-center">
-              {isUser ? (
+              {fullName ? (
                 <>
                   <li className="hover:text-primary-color transition ease-out duration-200 cursor-pointer ">
                     <button
