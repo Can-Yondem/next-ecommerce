@@ -1,29 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { MdPersonOutline } from "react-icons/md";
 import { FiShoppingCart } from "react-icons/fi";
 import { AiOutlineSearch } from "react-icons/ai";
 import DropDownAccount from "../DropDownAccount";
 import TextTruncate from "react-text-truncate";
-import { useSelector, useDispatch } from "react-redux";
-import { checkUserLoggedIn } from "../../redux/user/userSlice";
 import Navbar from "../Navbar/";
 
-const Header = () => {
+const Header = ({role,fullName, isUser}) => {
   const [toggle, setToggle] = useState(false);
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.users.user);
-
-  let role = "";
-  let fullName = "";
-
-  useEffect(() => {
-    dispatch(checkUserLoggedIn());
-  }, [dispatch]);
-
-  if (user !== null) {
-    role = user.user.role.type;
-    fullName = `${user.user.name} ${user.user.surname}`;
-  }
 
   return (
     <>
@@ -42,7 +26,7 @@ const Header = () => {
               </div>
             </div>
             <ul className="flex gap-10 text-3xl col-span-3 ml-auto items-center">
-              {user ? (
+              {isUser ? (
                 <>
                   <li className="hover:text-primary-color transition ease-out duration-200 cursor-pointer ">
                     <button
