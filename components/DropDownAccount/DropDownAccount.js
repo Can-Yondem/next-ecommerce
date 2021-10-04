@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux';
-import { signout } from '../redux/user/userSlice';
+import { signout } from '../../redux/user/userSlice';
 import { useRouter } from 'next/router';
 
 

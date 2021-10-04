@@ -1,15 +1,13 @@
-import Head from 'next/head'
-import MainCarousel from "../components/MainCarousel"
-import Layout from '../components/Layout'
-import Products from '../components/Products'
-import CategoryCarousel from '../components/CategoryCarousel'
-import { useDispatch, useSelector } from "react-redux"
-import { get_subcategory, get_othercategory } from "../redux/products/productsSlice"
-import { useEffect, useState } from "react"
-import { getRandomCategories } from '../utils/randomCategories'
-
-
-
+import Head from "next/head";
+import MainCarousel from "../components/MainCarousel/MainCarousel";
+import CategoryCarousel from "../components/CategoryCarousel";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  get_subcategory,
+  get_othercategory,
+} from "../redux/products/productsSlice";
+import { useEffect, useState } from "react";
+import { getRandomCategories } from "../utils/randomCategories";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -29,9 +27,8 @@ export default function Home() {
   //if (!subcategory) return null;
 
   /*
-  * Fonksiyon parametreleri (Rasgele sayının maksimum değeri, ürün dizisi, dizi kaç parametreli dönsün)
-  */
-
+   * Fonksiyon parametreleri (Rasgele sayının maksimum değeri, ürün dizisi, dizi kaç parametreli dönsün)
+   */
 
   //<CategoryCarousel productitem={item.products} />
   /*          <div className="mb-16">
@@ -40,7 +37,7 @@ export default function Home() {
           </div>
           */
 
-          /* 
+  /* 
         {randomCategories.map((item,index) => {
             return (
               <div className="mb-16" key={index}>
@@ -53,18 +50,18 @@ export default function Home() {
   return (
     <>
       <MainCarousel />
-        <div className="mt-16 container mx-auto">
-
-          {otherCategory.map((item,index) => {
-            return (
-              <div className="mb-16" key={index}>
-                <p className="font-bold text-4xl text-header-color mb-5 ml-4 ">{item.other_category_name}</p>
-                <CategoryCarousel productitem={item.products} />
-              </div>
-            )
-          })}
-
-        </div>
+      <div className="mt-16 container mx-auto">
+        {otherCategory.map((item, index) => {
+          return (
+            <div className="mb-16" key={index}>
+              <p className="font-bold text-4xl text-header-color mb-5 ml-4 ">
+                {item.other_category_name}
+              </p>
+              <CategoryCarousel productitem={item.products} />
+            </div>
+          );
+        })}
+      </div>
     </>
-  )
+  );
 }

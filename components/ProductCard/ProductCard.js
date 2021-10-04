@@ -1,13 +1,17 @@
 import StarRatings from 'react-star-ratings';
 import Link from 'next/link';
+import ımage from 'next/image'
 
 const ProductCard = ({ item }) => {
+    const myLoader=({src})=>{
+        return item.image1[0] ? item.image1[0].url : "none.png";
+      }
     return (
         <div className="flex flex-col shadow-2xl rounded-2xl p-4 cursor-pointer">
             <Link href="/product/[slug]" as={`/product/${item.slug}`}>
-                <div className="py-3">
+                <div className="py-3 mx-auto relative">
                     <a>
-                        <img src={item.image1[0] ? item.image1[0].url : "none.png"} alt="" className="object-contain w-52 mx-auto" />
+                        <ımage loader={myLoader} src={item.image1[0] ? item.image1[0].url : "none.png"} alt="" height="250" width="250"/>
                     </a>
                 </div>
             </Link>
