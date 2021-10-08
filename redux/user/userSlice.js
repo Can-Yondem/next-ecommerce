@@ -60,7 +60,9 @@ export const userSlice = createSlice({
     name: "user",
     initialState: {
         user: null,
+        token: null,
         error: null,
+        loading: false
     },
     reducers: {},
     extraReducers: {
@@ -79,8 +81,13 @@ export const userSlice = createSlice({
         [signout.fulfilled]: (state, action) => {
             state.user = null;
         },
+        [checkUserLoggedIn.pending]: (state, action) => {
+            state.loading = true;
+        },
         [checkUserLoggedIn.fulfilled]: (state, action) => {
+            state.loading = false;
             state.user = action.payload;
+            state.token = action.payload.token
         },
         [checkUserLoggedIn.rejected]: (state, action) => {
             state.user = null;

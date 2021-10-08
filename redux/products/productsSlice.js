@@ -16,6 +16,7 @@ export const get_othercategory = createAsyncThunk("products/getOtherCategory", a
 export const get_maincategory = createAsyncThunk("products/getMainCategory", async () => {
     const { data } = await client.query({query:GET_MAıNCATEGORY});
     return data.mainCategories
+ 
 })
 
 export const productsSlice = createSlice({

@@ -5,10 +5,13 @@ import { AiOutlineSearch } from "react-icons/ai";
 import DropDownAccount from "../DropDownAccount";
 import TextTruncate from "react-text-truncate";
 import Navbar from "../Navbar/";
+import BagModal from "../BagModal/BagModal";
+import { useSelector } from "react-redux";
 
 const Header = ({ role, fullName }) => {
   const [toggle, setToggle] = useState(false);
-
+  const [shopingCardToggle, setShoppingCardToggle] = useState(false);
+  const userBag = useSelector((state) => state.bag.userBag);
   return (
     <>
       <div className=" w-full fixed z-10 top-0 bg-white ">
@@ -69,8 +72,10 @@ const Header = ({ role, fullName }) => {
                 </li>
               )}
 
-              <li className="hover:text-primary-color transition ease-out duration-200 cursor-pointer">
+              <li className="hover:text-primary-color transition ease-out duration-200 cursor-pointer relative" onClick={() => setShoppingCardToggle(!shopingCardToggle)}>
+                <div className="absolute bg-red-600 rounded-full text-sm text-white h-4 w-4 flex items-center justify-center -right-1">{userBag.length}</div>
                 <FiShoppingCart />
+                {shopingCardToggle && <BagModal />}
               </li>
             </ul>
           </div>

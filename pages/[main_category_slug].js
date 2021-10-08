@@ -2,10 +2,24 @@ import React from "react";
 import ProductCard from "../components/ProductCard";
 import client from "../apollo-client";
 import { GET_FıLTER_MAINCATEGORY, GET_MAıNCATEGORY } from "../graphql/queries";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Products = ({ product }) => {
+
   return (
     <div className="container mx-auto">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div>
         {product.map((item) => {
           return (
@@ -25,7 +39,7 @@ const Products = ({ product }) => {
                     </div>
                     <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-x-5 gap-y-10">
                       {sub_item.products.map((product) => {
-                        return <ProductCard item={product} />;
+                        return <ProductCard item={product} key={product.id} />;
                       })}
                     </div>
                   </>

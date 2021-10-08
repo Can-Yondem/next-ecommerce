@@ -17,9 +17,9 @@ export default function Home() {
   const [randomCategories, setRandomCategories] = useState(null);
 
   useEffect(() => {
-    dispatch(get_subcategory());
     dispatch(get_othercategory());
-  }, [dispatch]);
+  },[dispatch]);
+
 
   //setRandomCategories(getRandomCategories(subcategory.length, subcategory, 3));
   if (!otherCategory) return null;
