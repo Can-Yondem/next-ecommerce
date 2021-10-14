@@ -13,9 +13,9 @@ const ProductCard = ({ item }) => {
     return item.image1[0] ? item.image1[0].url : "none.png";
   };
 
-  const sendProduct = async (item) => {
+  const sendProduct = (item) => {
     dispatch(
-      await post_bag({
+      post_bag({
         id: item._id,
         price: item.price,
         quantity: 1,

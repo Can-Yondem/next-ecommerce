@@ -177,6 +177,8 @@ const UPDATE_PRODUCT_QUANTITY = gql`
       }
     ) {
       bagg {
+        id,
+        price,
         quantity
       }
     }
@@ -226,6 +228,25 @@ mutation update_isordered($id: ID!, $isOrdered: Boolean!){
 }
 `
 
+const GET_PRODUCTS = gql`
+query{
+  products{
+    id,
+    product_name,
+    image1{
+      url
+    }
+  }
+}
+`
+
+const FIND_USERNAME = gql`
+query findUsername($username:String!){
+  users(where:{username:$username}){
+    id
+  }
+}`
+
 export {
   GET_PRODUCTS_SLUG,
   GET_SUBCATEGORY_AND_PRODUCTS,
@@ -240,5 +261,7 @@ export {
   UPDATE_PRODUCT_QUANTITY,
   CREATE_ORDER,
   UPDATE_BAG_ISORDERED,
-  GET_ORDER
+  GET_ORDER,
+  GET_PRODUCTS,
+  FIND_USERNAME
 };

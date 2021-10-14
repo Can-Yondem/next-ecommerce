@@ -7,24 +7,32 @@ import { AiOutlineMail } from "react-icons/ai";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { signin } from "../../redux/user/userSlice";
-import { useRouter } from "next/router";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(signin({ email, password })).then((res) =>
-      res.type === "user/signin/rejected"
-        ? alert(res.payload)
-        : router.push("/")
-    );
+    await dispatch(signin({ email, password }));
+    setPassword("");
   };
   return (
-    <div className="">
+    <div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <form className="flex flex-col justify-center items-center gap-6 bg-white sm:w-[475px] w-[350px] rounded-b-xl mx-auto">
         <div>
           <div className="flex items-center border-b-2 border-gray-300 focus-within:border-primary-color">

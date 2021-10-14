@@ -12,6 +12,7 @@ const DropMenuAccount = ({ role }) => {
 
     const sign_out = async () => {
         dispatch(signout()).then(router.push("/"))
+        window.location.reload();
     }
 
     return (

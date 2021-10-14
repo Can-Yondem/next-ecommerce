@@ -3,7 +3,6 @@ import Link from "next/link";
 
 const BagModal = () => {
   const userBag = useSelector((state) => state.bag.userBag);
-  console.log(userBag)
   return (
     <div className="absolute top-12 -left-52 w-96 ">
       <div className="bg-white rounded-md border-2 border-gray-300">

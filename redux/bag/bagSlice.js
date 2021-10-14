@@ -56,7 +56,7 @@ export const update_bag = createAsyncThunk("bag/updateBag", async (item) => {
 export const update_quantity = createAsyncThunk(
   "bag/updateQuantity",
   async (item) => {
-    await client.mutate({
+    const { data } = await client.mutate({
       mutation: UPDATE_PRODUCT_QUANTITY,
       variables: { id: item.id, quantity: item.quantity, price: item.price },
       context: {
@@ -65,6 +65,7 @@ export const update_quantity = createAsyncThunk(
         },
       },
     });
+    return data.updateBagg.bagg;
   }
 );
 
@@ -125,13 +126,7 @@ export const bagSlice = createSlice({
     deleteItem: (state, action) => {
       let newBag = state.userBag.filter((item) => item.id !== action.payload);
       state.userBag = newBag;
-    },
-    updateQuantity: (state, action) => {
-      let productIndex = state.userBag.findIndex((item) => item.id === item.id);
-      state.userBag[productIndex].price = action.payload.price;
-      state.userBag[productIndex].quantity = action.payload.quantity;
-      console.log(action.payload.quantity)
-    },
+    }
   },
   extraReducers: {
     [post_bag.pending]: (state, action) => {
@@ -155,6 +150,13 @@ export const bagSlice = createSlice({
     },
     [get_order.fulfilled]: (state, action) => {
       state.orders = action.payload;
+    },
+    [update_quantity.fulfilled]: (state, action) => {
+      let productIndex = state.userBag.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      state.userBag[productIndex].price = action.payload.price;
+      state.userBag[productIndex].quantity = action.payload.quantity;
     },
   },
 });
