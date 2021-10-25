@@ -26,7 +26,7 @@ const ProductCard = ({ item }) => {
   };
 
   return (
-    <div className="flex flex-col shadow-2xl rounded-2xl p-4 cursor-pointer">
+    <div className="flex flex-col justify-between shadow-2xl rounded-2xl p-4 cursor-pointer">
       <Link href="/product/[slug]" as={`/product/${item.slug}`}>
         <div className="py-3 mx-auto relative">
           <a>

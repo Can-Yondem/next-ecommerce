@@ -1,26 +1,5 @@
 import { gql } from "@apollo/client";
 
-const ADD_PRODUCT = gql`
-  mutation {
-    createProduct(
-      input: {
-        data: {
-          product_name: "Samsung Galaxy Note 5"
-          product_desc: "Telefon"
-          price: 3500
-          stock: 50
-          category: "6152e0d1a58b23082c1e56d4"
-        }
-      }
-    ) {
-      product {
-        product_name
-        price
-      }
-    }
-  }
-`;
-
 const GET_PRODUCTS_SLUG = gql`
   query get_products {
     products {
@@ -65,8 +44,12 @@ const GET_SUBCATEGORY_AND_PRODUCTS = gql`
 const GET_MAıNCATEGORY = gql`
   query {
     mainCategories {
+      id
       main_category
       main_category_slug
+      categories {
+        id
+      }
     }
   }
 `;
@@ -143,7 +126,7 @@ const POST_BAG = gql`
 
 const GET_BAG = gql`
   query {
-    baggs(where: {isOrdered:false}) {
+    baggs(where: { isOrdered: false }) {
       id
       price
       quantity
@@ -177,8 +160,8 @@ const UPDATE_PRODUCT_QUANTITY = gql`
       }
     ) {
       bagg {
-        id,
-        price,
+        id
+        price
         quantity
       }
     }
@@ -187,7 +170,11 @@ const UPDATE_PRODUCT_QUANTITY = gql`
 
 const CREATE_ORDER = gql`
   mutation createOrder($user_id: ID!, $baggs: [ID!], $total_price: Float!) {
-    createOrder(input: { data: { user: $user_id, baggs: $baggs, total_price: $total_price } }) {
+    createOrder(
+      input: {
+        data: { user: $user_id, baggs: $baggs, total_price: $total_price }
+      }
+    ) {
       order {
         id
       }
@@ -196,61 +183,300 @@ const CREATE_ORDER = gql`
 `;
 
 const GET_ORDER = gql`
-query{
-  orders{
-    id,
-    createdAt,
-    status,
-    total_price,
-    user{
-        name,
+  query {
+    orders {
+      id
+      createdAt
+      updatedAt
+      status
+      total_price
+      user {
+        name
         surname
-      },
-    baggs{
-      quantity,
-      price,
-      product{
-        product_name,
-        image1{
-          url
+      }
+      baggs {
+        quantity
+        price
+        product {
+          product_name
+          image1 {
+            url
+          }
         }
       }
     }
   }
-}
 `;
 
 const UPDATE_BAG_ISORDERED = gql`
-mutation update_isordered($id: ID!, $isOrdered: Boolean!){
-  updateBagg(input: {where: {id: $id} data:{isOrdered: $isOrdered}}){
-    bagg{isOrdered}
+  mutation update_isordered($id: ID!, $isOrdered: Boolean!) {
+    updateBagg(input: { where: { id: $id }, data: { isOrdered: $isOrdered } }) {
+      bagg {
+        isOrdered
+      }
+    }
   }
-}
-`
+`;
 
 const GET_PRODUCTS = gql`
-query{
-  products{
-    id,
-    product_name,
-    image1{
-      url
+  query {
+    products {
+      id
+      product_name
+      slug
+      image1 {
+        url
+      }
+    }
+  }
+`;
+
+const FIND_USERNAME = gql`
+  query findUsername($username: String!) {
+    users(where: { username: $username }) {
+      id
+    }
+  }
+`;
+
+const ADD_MAINCATEGORY = gql`
+  mutation addMainCategory($category_name: String!) {
+    createMainCategory(input: { data: { main_category: $category_name } }) {
+      mainCategory {
+        id
+        main_category
+      }
+    }
+  }
+`;
+
+const DELETE_MAINCATEGORY = gql`
+  mutation deleteMainCategory($category_id: ID!) {
+    deleteMainCategory(input: { where: { id: $category_id } }) {
+      mainCategory {
+        _id
+      }
+    }
+  }
+`;
+
+const GET_CATEGORY = gql`
+  query {
+    categories {
+      id
+      categoryName
+      main_category {
+        id
+        main_category
+      }
+      sub_categories {
+        id
+        sub_category
+      }
+    }
+  }
+`;
+
+const GET_SUBCATEGORY = gql`
+  query {
+    subCategories {
+      id
+      sub_category
+      category {
+        id
+        categoryName
+      }
+    }
+  }
+`;
+
+const ADD_CATEGORY = gql`
+  mutation addCategory($category_name: String!, $main_category_id: ID!) {
+    createCategory(
+      input: {
+        data: { categoryName: $category_name, main_category: $main_category_id }
+      }
+    ) {
+      category {
+        id
+        categoryName
+        main_category {
+          id
+          main_category
+        }
+      }
+    }
+  }
+`;
+
+const DELETE_CATEGORY = gql`
+  mutation addCategory($category_id: ID!) {
+    deleteCategory(input: { where: { id: $category_id } }) {
+      category {
+        id
+      }
+    }
+  }
+`;
+
+const ADD_SUBCATEGORY = gql`
+  mutation addSubCategory($category_name: String!, $category_id: ID!) {
+    createSubCategory(
+      input: { data: { sub_category: $category_name, category: $category_id } }
+    ) {
+      subCategory {
+        id
+        sub_category
+        category {
+          id
+          categoryName
+        }
+      }
+    }
+  }
+`;
+
+const DELETE_SUBCATEGORY = gql`
+  mutation deleteSubCategory($category_id: ID!) {
+    deleteSubCategory(input: { where: { id: $category_id } }) {
+      subCategory {
+        id
+      }
+    }
+  }
+`;
+
+const GET_PRODUCTS_LIMIT = gql`
+  query getProducts($limit: Int!, $start: Int!) {
+    products(limit: $limit, start: $start, sort: "createdAt:desc") {
+      id
+      product_name
+      product_desc
+      price
+      trademark
+      sub_category {
+        sub_category
+      }
+      image1 {
+        url
+      }
+    }
+  }
+`;
+
+const PRODUCTS_COUNT = gql`
+  query {
+    productsConnection {
+      aggregate {
+        count
+      }
+    }
+  }
+`;
+
+const GET_IMAGE = gql`
+  query getImage {
+    image {
+      base64
+    }
+  }
+`;
+
+const ADD_PRODUCT = gql`
+  mutation addProduct(
+    $name: String!
+    $desc: String!
+    $tradeMark: String!
+    $price: Float!
+    $stock: Int!
+    $subCategory: ID!
+  ) {
+    createProduct(
+      input: {
+        data: {
+          product_name: $name
+          product_desc: $desc
+          price: $price
+          stock: $stock
+          trademark: $tradeMark
+          sub_category: $subCategory
+        }
+      }
+    ) {
+      product {
+        id
+        product_name
+        product_desc
+        price
+        stock
+        trademark
+        sub_category {
+          id
+          sub_category
+        }
+      }
+    }
+  }
+`;
+
+const DELETE_PRODUCT = gql`
+  mutation deleteProduct($id: ID!) {
+    deleteProduct(input: { where: { id: $id } }) {
+      product {
+        id
+      }
+    }
+  }
+`;
+
+const UPDATE_MAINCATEGORY = gql`
+  mutation updateMainCategory($category: String!, $id: ID!) {
+    updateMainCategory(
+      input: { where: { id: $id }, data: { main_category: $category } }
+    ) {
+      mainCategory {
+        id
+        main_category
+      }
+    }
+  }
+`;
+
+const UPDATE_CATEGORY = gql`
+  mutation updateCategory($category: String!, $main_category: ID!, $id: ID!) {
+    updateCategory(
+      input: { where: { id: $id }, data: { categoryName: $category, main_category: $main_category } }
+    ) {
+      category {
+        id
+        categoryName
+        main_category{
+          id
+          main_category
+        }
+      }
+    }
+  }
+`;
+
+const UPDATE_SUBCATEGORY = gql`
+mutation($sub_category:String!, $category: ID!, $id: ID!){
+  updateSubCategory(input:{where:{id: $id}, data:{sub_category:$sub_category, category:$category}}){
+    subCategory{
+      id
+      sub_category
+      category{
+        id
+        categoryName
+      }
     }
   }
 }
 `
 
-const FIND_USERNAME = gql`
-query findUsername($username:String!){
-  users(where:{username:$username}){
-    id
-  }
-}`
-
 export {
   GET_PRODUCTS_SLUG,
   GET_SUBCATEGORY_AND_PRODUCTS,
-  ADD_PRODUCT,
   GET_MAıNCATEGORY,
   GET_OTHERCATEGORY_AND_PRODUCTS,
   GET_FıLTER_SLUG_PRODUCTS,
@@ -263,5 +489,21 @@ export {
   UPDATE_BAG_ISORDERED,
   GET_ORDER,
   GET_PRODUCTS,
-  FIND_USERNAME
+  FIND_USERNAME,
+  ADD_MAINCATEGORY,
+  DELETE_MAINCATEGORY,
+  GET_CATEGORY,
+  GET_SUBCATEGORY,
+  ADD_CATEGORY,
+  DELETE_CATEGORY,
+  ADD_SUBCATEGORY,
+  DELETE_SUBCATEGORY,
+  GET_PRODUCTS_LIMIT,
+  PRODUCTS_COUNT,
+  GET_IMAGE,
+  ADD_PRODUCT,
+  DELETE_PRODUCT,
+  UPDATE_MAINCATEGORY,
+  UPDATE_CATEGORY,
+  UPDATE_SUBCATEGORY
 };

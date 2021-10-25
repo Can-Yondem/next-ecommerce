@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { get_products } from "../../redux/products/productsSlice";
+import Link from "next/link";
 
 const SearchBar = () => {
   const [search, setSearch] = useState("");
   const [result, setResult] = useState(false);
-  const products = useSelector(state => state.products.products)
+  const products = useSelector((state) => state.products.products);
   const dispatch = useDispatch();
 
   const isTyping = search.replace(/\s+/, "").length > 0;
@@ -33,6 +34,7 @@ const SearchBar = () => {
         placeholder="Ürün ara"
         className="outline-none border-2 border-r-0 rounded-l-2xl border-gray-300 w-full h-9 p-1 pl-3"
         onChange={(e) => setSearch(e.target.value)}
+        value={search}
       />
       <div className="border-2 border-l-0 rounded-r-2xl flex items-center text-2xl pr-2 text-gray-800 border-gray-300 h-9">
         <AiOutlineSearch />
@@ -42,17 +44,20 @@ const SearchBar = () => {
           {result ? (
             result.map((product) => {
               return (
-                <li
-                  key={product.id}
-                  className="flex items-center gap-x-7 hover:bg-gray-200 transition duration-300 cursor-pointer px-6 py-2 border-l-8 border-white hover:border-primary-color"
-                >
-                  <img
-                    src={product.image1[0]?.url}
-                    alt=""
-                    className="w-16 h-16"
-                  />
-                  <p>{product.product_name}</p>
-                </li>
+                <Link href={`/product/${product.slug}`}>
+                    <li
+                      key={product.id}
+                      className="flex items-center gap-x-7 hover:bg-gray-200 transition duration-300 cursor-pointer px-6 py-2 border-l-8 border-white hover:border-primary-color"
+                      onClick={() => setSearch("")}
+                    >
+                      <img
+                        src={product.image1[0]?.url}
+                        alt=""
+                        className="w-16 h-16"
+                      />
+                      <p>{product.product_name}</p>
+                    </li>
+                </Link>
               );
             })
           ) : (

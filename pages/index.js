@@ -3,7 +3,7 @@ import MainCarousel from "../components/MainCarousel/MainCarousel";
 import CategoryCarousel from "../components/CategoryCarousel";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  get_subcategory,
+  get_subcategory_and_products,
   get_othercategory,
 } from "../redux/products/productsSlice";
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ import { getRandomCategories } from "../utils/randomCategories";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const subcategory = useSelector((state) => state.products.subcategory);
+  //const subcategory = useSelector((state) => state.products.subcategory);
   const otherCategory = useSelector((state) => state.products.otherCategory);
   const loading = useSelector((state) => state.products.loading);
   const [randomCategories, setRandomCategories] = useState(null);

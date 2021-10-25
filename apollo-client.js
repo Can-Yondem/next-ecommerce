@@ -6,3 +6,4 @@ const client = new ApolloClient({
 });
 
 export default client;
+//process.env.NEXT_PUBLIC_GRAPHQL_URL

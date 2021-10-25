@@ -5,21 +5,30 @@ import { AiOutlineTwitter } from "react-icons/ai";
 import { ImFacebook } from "react-icons/im";
 import { AiOutlineMail } from "react-icons/ai";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signin } from "../../redux/user/userSlice";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/router";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    await dispatch(signin({ email, password }));
+    dispatch(signin({ email, password }))
+    .then((res) => {
+      if(res.meta.requestStatus === "fulfilled"){
+        router.push("/")
+      }
+    });
+
     setPassword("");
   };
+
   return (
     <div>
       <ToastContainer

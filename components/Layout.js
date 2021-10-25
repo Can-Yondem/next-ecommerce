@@ -3,7 +3,7 @@ import Header from "./Header";
 import { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import { checkUserLoggedIn } from "../redux/user/userSlice";
-import { get_bag, deleteBagAndOrders } from "../redux/bag/bagSlice";
+import { get_bag } from "../redux/bag/bagSlice";
 
 const Layout = ({ children }) => {
   const router = useRouter();
@@ -24,11 +24,13 @@ const Layout = ({ children }) => {
     fullName = `${user.user.name} ${user.user.surname}`;
   }
 
-  const routeControl = router.route !== "/login";
+  const routeControl =
+    router.route !== "/login" && router.route.split("/")[1] !== "admin";
+
   return (
     <>
       {routeControl && <Header role={role} fullName={fullName} />}
-      <main className={routeControl && "mt-32"}>{children}</main>
+      <div className={routeControl && "mt-32"}>{children}</div>
     </>
   );
 };
