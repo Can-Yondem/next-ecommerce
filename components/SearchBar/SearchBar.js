@@ -51,7 +51,7 @@ const SearchBar = () => {
                       onClick={() => setSearch("")}
                     >
                       <img
-                        src={product.image1[0]?.url}
+                        src={product.image1?.url}
                         alt=""
                         className="w-16 h-16"
                       />

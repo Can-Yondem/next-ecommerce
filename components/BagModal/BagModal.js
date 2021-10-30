@@ -13,7 +13,7 @@ const BagModal = () => {
             return (
               <div className="flex items-center border-b-2 border-gray-300 p-4">
                 <img
-                  src={item.product?.image1[0].url}
+                  src={item.product?.image1.url}
                   alt=""
                   className="w-20 h-20"
                 />

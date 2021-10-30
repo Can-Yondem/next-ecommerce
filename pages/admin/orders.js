@@ -1,19 +1,47 @@
-import PanelLayout from "../../components/PanelLayout";
 import { useSelector, useDispatch } from "react-redux";
-import { get_order } from "../../redux/bag/bagSlice";
+import {
+  get_order,
+  update_order,
+  findOrderDetail,
+  delete_order,
+} from "../../redux/bag/bagSlice";
 import { useEffect, useState } from "react";
+import PanelLayout from "../../components/PanelLayout";
+import PanelOrder from "../../components/PanelOrder";
+import PanelOrderDetail from "../../components/PanelOrderDetail";
 
 const orders = () => {
   const token = useSelector((state) => state.users.token);
   const orders = useSelector((state) => state.bag.orders);
+  const orderDetail = useSelector((state) => state.bag.orderDetail);
   const dispatch = useDispatch();
-
+  const [toggle, setToggle] = useState(false);
   useEffect(() => {
     dispatch(get_order(token));
   });
 
+  const updateOrder = (orderData) => {
+    dispatch(update_order({ ...orderData, token }));
+  };
+
+  const deleteOrder = (id) => {
+    dispatch(delete_order({ id, token }));
+  };
+
+  const handleClick = (id) => {
+    setToggle(!toggle);
+    dispatch(findOrderDetail(id));
+  };
+
   return (
     <PanelLayout>
+      {toggle && (
+        <PanelOrderDetail
+          orderDetail={orderDetail[0]}
+          toggle={toggle}
+          setToggle={setToggle}
+        />
+      )}
       <div className="flex justify-between mb-5">
         <p className="text-4xl">Siparişler</p>
       </div>
@@ -23,28 +51,17 @@ const orders = () => {
             <th className="w-2/12 py-3">ID</th>
             <th className="w-2/12 py-3">Sipariş Tarihi</th>
             <th className="w-2/12 py-3">Müşteri</th>
-            <th className="w-2/12 py-3">Fiyat</th>
-            <th className="w-2/12 py-3">Durum</th>
+            <th className="w-1/12 py-3">Fiyat</th>
+            <th className="w-1/12 py-3">Durum</th>
             <th className="w-2/12 py-3">Güncelleme Tarihi</th>
-            <th className="w-1/12 py-3">Işlemler</th>
+            <th className="w-2/12 py-3">Işlemler</th>
           </tr>
           {orders.map((order) => {
             return (
-              <tr className="border-b-[1px] text-xs hover:bg-green-50 transition duration-300 ease-out">
-                <td className="py-3">{order.id}</td>
-                <td className="py-3">{order.createdAt}</td>
-                <td className="py-3">{`${order?.user.name} ${order?.user.surname}`}</td>
-                <td className="py-3">{order.total_price}₺</td>
-                <td className="py-3">{order.status}</td>
-                <td className="py-3">{order.updatedAt}</td>
-                <td className="text-xl py-3">
-                  <button
-                    className="bg-red-600 text-sm py-1 px-3 text-white rounded-md mr-3"
-                    onClick={() => deleteCategory(data.id)}
-                  >
-                    Sil
-                  </button>
-                </td>
+              <tr
+                className="border-b-[1px] text-xs hover:bg-green-50 transition duration-300 ease-out"
+              >
+                <PanelOrder order={order} updateOrder={updateOrder} deleteOrder={deleteOrder} onClick={() => handleClick(order.id)}/>
               </tr>
             );
           })}

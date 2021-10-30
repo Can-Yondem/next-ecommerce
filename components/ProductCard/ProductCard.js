@@ -1,6 +1,5 @@
 import StarRatings from "react-star-ratings";
 import Link from "next/link";
-import ımage from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { post_bag } from "../../redux/bag/bagSlice";
 
@@ -10,7 +9,7 @@ const ProductCard = ({ item }) => {
   const post_bag_loading = useSelector((state) => state.bag.loading);
   const token = useSelector((state) => state.users.token);
   const myLoader = ({ src }) => {
-    return item.image1[0] ? item.image1[0].url : "none.png";
+    return item.image1 ? item.image1.url : "none.png";
   };
 
   const sendProduct = (item) => {
@@ -30,9 +29,9 @@ const ProductCard = ({ item }) => {
       <Link href="/product/[slug]" as={`/product/${item.slug}`}>
         <div className="py-3 mx-auto relative">
           <a>
-            <ımage
+            <img
               loader={myLoader}
-              src={item.image1[0] ? item.image1[0].url : "none.png"}
+              src={item.image1 ? item.image1.url : "none.png"}
               alt=""
               height="250"
               width="250"

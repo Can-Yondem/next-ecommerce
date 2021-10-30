@@ -106,7 +106,7 @@ const bag = () => {
                     <tr className="border-t-2 border-b-2" key={item.id}>
                       <td className="flex py-5">
                         <img
-                          src={item.product?.image1[0].url}
+                          src={item.product?.image1.url}
                           alt=""
                           className="w-24"
                         />

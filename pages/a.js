@@ -15,6 +15,10 @@ export default function ImageUploader({ img }) {
       });
   },[files]);
 
+  console.log(fullName);
+  var fullName = "jhon doe";
+  
+
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: ".jpeg, .png, .jpg",
@@ -44,6 +48,11 @@ export default function ImageUploader({ img }) {
     });
   };
 
+  const str1 = "";
+  const str2 = "abc";
+  console.log(!str1)
+  console.log(!!str1)
+  console.log(!str2)
 
   return (
     <div>
@@ -56,6 +65,9 @@ export default function ImageUploader({ img }) {
       </div>
       <div>
         <img src={`data:image/png;base64,${postImage.base64}`} alt="" />
+      </div>
+      <div className="border-2 max-w-[300px] h-60 break-all">
+        <p>asdasdasdasdddddddddddddddddddddddddddddds</p>
       </div>
     </div>
   );

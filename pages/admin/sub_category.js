@@ -2,10 +2,11 @@ import PanelLayout from "../../components/PanelLayout";
 import { useSelector, useDispatch } from "react-redux";
 import {
   get_subcategory,
+  get_category,
   delete_subcategory,
   update_subcategory,
 } from "../../redux/products/productsSlice";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import PanelSubCategory from "../../components/PanelSubCategory";
 import PanelCategoryLayout from "../../components/PanelCategoryLayout";
 
@@ -17,6 +18,7 @@ const sub_category = () => {
 
   useEffect(() => {
     dispatch(get_subcategory());
+    dispatch(get_category());
   }, [dispatch]);
 
   const deleteCategory = (categoryId) => {

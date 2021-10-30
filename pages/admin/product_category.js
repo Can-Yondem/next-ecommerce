@@ -4,8 +4,9 @@ import {
   get_category,
   delete_category,
   update_category,
+  get_maincategory,
 } from "../../redux/products/productsSlice";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import PanelCategory from "../../components/PanelCategory";
 import PanelCategoryLayout from "../../components/PanelCategoryLayout";
 
@@ -17,6 +18,7 @@ const product_category = () => {
 
   useEffect(() => {
     dispatch(get_category());
+    dispatch(get_maincategory());
   }, [dispatch]);
 
 

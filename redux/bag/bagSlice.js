@@ -8,6 +8,8 @@ import {
   CREATE_ORDER,
   UPDATE_BAG_ISORDERED,
   GET_ORDER,
+  UPDATE_ORDER,
+  DELETE_ORDER,
 } from "../../graphql/queries";
 import { toast } from "react-toastify";
 
@@ -115,18 +117,57 @@ export const get_order = createAsyncThunk("bag/getOrder", async (token) => {
   return data.orders;
 });
 
+export const update_order = createAsyncThunk(
+  "bag/updateOrder",
+  async ({ id, status, token }) => {
+    const { data } = await client.mutate({
+      mutation: UPDATE_ORDER,
+      variables: { id, status },
+      context: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    });
+    return data.updateOrder.order;
+  }
+);
+
+export const delete_order = createAsyncThunk(
+  "bag/deleteOrder",
+  async ({ id, token }) => {
+    const { data } = await client.mutate({
+      mutation: DELETE_ORDER,
+      variables: { id },
+      context: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    });
+    return data.deleteOrder.order.id;
+  }
+);
+
 export const bagSlice = createSlice({
   name: "bag",
   initialState: {
     userBag: [],
     orders: [],
+    orderDetail: [],
     loading: false,
   },
   reducers: {
     deleteItem: (state, action) => {
       let newBag = state.userBag.filter((item) => item.id !== action.payload);
       state.userBag = newBag;
-    }
+    },
+    findOrderDetail: (state, action) => {
+      let filterOrder = state.orders.filter(
+        (order) => order.id === action.payload
+      );
+      state.orderDetail = filterOrder;
+    },
   },
   extraReducers: {
     [post_bag.pending]: (state, action) => {
@@ -158,8 +199,24 @@ export const bagSlice = createSlice({
       state.userBag[productIndex].price = action.payload.price;
       state.userBag[productIndex].quantity = action.payload.quantity;
     },
+    [update_order.fulfilled]: (state, action) => {
+      let orderIndex = state.orders.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      state.orders[orderIndex].status = action.payload.orderIndex;
+      state.orders[orderIndex].createdAt = action.payload.createdAt;
+      state.orders[orderIndex].updatedAt = action.payload.updatedAt;
+    },
+    [delete_order.fulfilled]: (state, action) => {
+      let newOrders = state.orders.filter(
+        (item) => item.id !== action.payload
+      );
+      state.orders = newOrders;
+      console.log(state.orders)
+      console.log(newOrders)
+    },
   },
 });
 
 export default bagSlice.reducer;
-export const { deleteItem, updateQuantity } = bagSlice.actions;
+export const { deleteItem, findOrderDetail } = bagSlice.actions;

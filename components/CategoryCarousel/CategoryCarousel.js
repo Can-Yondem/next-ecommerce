@@ -91,7 +91,7 @@ const CategoryCarousel = ({ productitem }) => {
       <Slider {...settings}>
         {productitem.map((item, index) => {
           const myLoader = ({ src }) => {
-            return item.image1[0] ? item.image1[0].url : "none.png";
+            return item.image1 ? item.image1.url : "none.png";
           };
           return (
             <div key={index}>
@@ -104,7 +104,7 @@ const CategoryCarousel = ({ productitem }) => {
                       <div className="border-2 border-gray-100 rounded-lg hover:shadow-lg transition ease-out duration-300 flex justify-center mr-5 ml-5">
                         <Image
                           loader={myLoader}
-                          src={item.image1[0] ? item.image1[0].url : "none.png"}
+                          src={item.image1 ? item.image1.url : "none.png"}
                           alt=""
                           height="200"
                           width="200"

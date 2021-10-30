@@ -19,6 +19,9 @@ import {
   UPDATE_MAINCATEGORY,
   UPDATE_CATEGORY,
   UPDATE_SUBCATEGORY,
+  IMAGE_UPLOAD,
+  ADD_COMMENT,
+  GET_COMMENT,
 } from "../../graphql/queries";
 import client from "../../apollo-client";
 
@@ -284,6 +287,50 @@ export const update_subcategory = createAsyncThunk(
   }
 );
 
+export const upload_image = createAsyncThunk(
+  "produtcs/imageUpload",
+  async ({ files, token }) => {
+    const { data } = await client.mutate({
+      mutation: IMAGE_UPLOAD,
+      variables: { file: files },
+      context: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    });
+    console.log(data, "data");
+  }
+);
+
+export const add_comment = createAsyncThunk(
+  "products/addComment",
+  async ({ comment, rating, token, user, product }) => {
+    const { data } = await client.mutate({
+      mutation: ADD_COMMENT,
+      variables: { comment, rating, user, product },
+      context: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    });
+    console.log(data)
+    return data.createComment.comment;
+  }
+);
+
+export const get_comment = createAsyncThunk(
+  "products/getComment",
+  async (id) => {
+    const { data } = await client.query({
+      query: GET_COMMENT,
+      variables: { id },
+    });
+    return data.products[0];
+  }
+);
+
 export const productsSlice = createSlice({
   name: "products",
   initialState: {
@@ -294,6 +341,7 @@ export const productsSlice = createSlice({
     category: null,
     otherCategory: null,
     mainCategory: null,
+    comments: [],
     error: null,
     loading: false,
   },
@@ -391,6 +439,12 @@ export const productsSlice = createSlice({
         (index) => index.id == action.payload.id
       );
       state.subcategory[foundIndex] = action.payload;
+    },
+    [add_comment.fulfilled]: (state, action) => {
+      state.comments.push(action.payload);
+    },
+    [get_comment.fulfilled]: (state, action) => {
+      state.comments = action.payload.comments;
     },
   },
 });

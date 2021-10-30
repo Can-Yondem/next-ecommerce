@@ -91,7 +91,7 @@ const orders = () => {
                   return (
                     <div className="grid grid-cols-12 placeholder-yellow-300 items-center my-4 border-l-4 border-primary-color ml-10">
                       <img
-                        src={bag.product?.image1[0].url}
+                        src={bag.product?.image1.url}
                         alt=""
                         className="w-14 h-14 mx-auto"
                       />

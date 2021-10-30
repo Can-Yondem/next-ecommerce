@@ -15,6 +15,17 @@ const GET_FıLTER_SLUG_PRODUCTS = gql`
       product_name
       product_desc
       price
+      comments {
+        id
+        comment
+        createdAt
+        user {
+          id
+          name
+          surname
+        }
+        rating
+      }
       image1 {
         url
         width
@@ -390,6 +401,7 @@ const ADD_PRODUCT = gql`
     $price: Float!
     $stock: Int!
     $subCategory: ID!
+    $image1: Upload!
   ) {
     createProduct(
       input: {
@@ -400,6 +412,7 @@ const ADD_PRODUCT = gql`
           stock: $stock
           trademark: $tradeMark
           sub_category: $subCategory
+          image1: $image1
         }
       }
     ) {
@@ -445,12 +458,15 @@ const UPDATE_MAINCATEGORY = gql`
 const UPDATE_CATEGORY = gql`
   mutation updateCategory($category: String!, $main_category: ID!, $id: ID!) {
     updateCategory(
-      input: { where: { id: $id }, data: { categoryName: $category, main_category: $main_category } }
+      input: {
+        where: { id: $id }
+        data: { categoryName: $category, main_category: $main_category }
+      }
     ) {
       category {
         id
         categoryName
-        main_category{
+        main_category {
           id
           main_category
         }
@@ -460,19 +476,108 @@ const UPDATE_CATEGORY = gql`
 `;
 
 const UPDATE_SUBCATEGORY = gql`
-mutation($sub_category:String!, $category: ID!, $id: ID!){
-  updateSubCategory(input:{where:{id: $id}, data:{sub_category:$sub_category, category:$category}}){
-    subCategory{
-      id
-      sub_category
-      category{
+  mutation ($sub_category: String!, $category: ID!, $id: ID!) {
+    updateSubCategory(
+      input: {
+        where: { id: $id }
+        data: { sub_category: $sub_category, category: $category }
+      }
+    ) {
+      subCategory {
         id
-        categoryName
+        sub_category
+        category {
+          id
+          categoryName
+        }
       }
     }
   }
-}
-`
+`;
+
+const UPDATE_ORDER = gql`
+  mutation updateOrder($id: ID!, $status: ENUM_ORDER_STATUS!) {
+    updateOrder(input: { where: { id: $id }, data: { status: $status } }) {
+      order {
+        id
+        createdAt
+        updatedAt
+        status
+      }
+    }
+  }
+`;
+
+const IMAGE_UPLOAD = gql`
+  mutation singleUpload($file: Upload!) {
+    upload(file: $file) {
+      id
+    }
+  }
+`;
+
+const DELETE_ORDER = gql`
+  mutation deleteOrder($id: ID!) {
+    deleteOrder(input: { where: { id: $id } }) {
+      order {
+        id
+      }
+    }
+  }
+`;
+
+const ADD_COMMENT = gql`
+  mutation addComment(
+    $comment: String!
+    $rating: Int!
+    $product: ID!
+    $user: ID!
+  ) {
+    createComment(
+      input: {
+        data: {
+          comment: $comment
+          rating: $rating
+          product: $product
+          user: $user
+        }
+      }
+    ) {
+      comment {
+        id
+        comment
+        updatedAt
+        rating
+        user {
+          id
+          name
+          surname
+        }
+        product {
+          id
+        }
+      }
+    }
+  }
+`;
+
+const GET_COMMENT = gql`
+  query getComment($id: ID!) {
+    products(where: { id: $id }) {
+      id
+      comments {
+        id
+        comment
+        user {
+          name
+          surname
+        }
+        rating
+        updatedAt
+      }
+    }
+  }
+`;
 
 export {
   GET_PRODUCTS_SLUG,
@@ -505,5 +610,10 @@ export {
   DELETE_PRODUCT,
   UPDATE_MAINCATEGORY,
   UPDATE_CATEGORY,
-  UPDATE_SUBCATEGORY
+  UPDATE_SUBCATEGORY,
+  IMAGE_UPLOAD,
+  UPDATE_ORDER,
+  DELETE_ORDER,
+  ADD_COMMENT,
+  GET_COMMENT,
 };

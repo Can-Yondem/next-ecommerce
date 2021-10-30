@@ -21,7 +21,7 @@ const PanelMainCategory = ({ data, deleteCategory, updateCategory }) => {
                 onChange={(e) => setCategory(e.target.value)}
               />
               <button
-                className="bg-blue-700 text-white text-sm p-2 ml-3 rounded-md"
+                className="bg-green-500 text-white text-sm p-2 ml-3 rounded-md"
                 onClick={() => submitUpdate(id, category)}
               >
                 Güncelle
